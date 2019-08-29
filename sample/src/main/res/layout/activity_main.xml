@@ -8,8 +8,11 @@
         tools:context=".MainActivity">
 
     <com.alexvasilkov.gestures.views.GestureImageView
+            android:id="@+id/imageView"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:text="Hello World!"/>
-
+            android:layout_height="match_parent"/>
+    <me.xfans.lib.imagemap.ImageMapLayer
+            android:id="@+id/imageMap"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"/>
 </RelativeLayout>

@@ -1,3 +1,5 @@
 package me.xfans.lib.imagemap.marker
 
-data class Marker(val id:Int)
+import android.graphics.drawable.Drawable
+
+data class Marker(val id: Int, var x: Float, var y: Float, var icon: Drawable)
