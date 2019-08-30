@@ -1,5 +1,7 @@
 package me.xfans.lib.imagemap.sample
 
+import android.graphics.Point
+import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -16,6 +18,7 @@ import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import com.alexvasilkov.gestures.State
+import me.xfans.lib.imagemap.polyline.Polyline
 
 
 class MainActivity : AppCompatActivity() {
@@ -41,6 +44,23 @@ class MainActivity : AppCompatActivity() {
         })
         var marker = Marker(1, 1000f, 200f, getIcon(R.color.colorAccent))
         var marker1 = Marker(1, 1500f, 600f, getIcon(R.color.colorPrimary))
+
+        var lists = mutableListOf<PointF>()
+        lists.add(PointF(1000f, 200f))
+
+        lists.add(PointF(1500f, 600f))
+        var polyline = Polyline(1, lists)
+        imageMap?.addPolyline(polyline)
+
+        var lists1 = mutableListOf<PointF>()
+        lists1.add(PointF(1200f, 1200f))
+        lists1.add(PointF(1100f, 1300f))
+        lists1.add(PointF(1100f, 1400f))
+        lists1.add(PointF(1500f, 1800f))
+        lists1.add(PointF(1800f, 1200f))
+        lists1.add(PointF(2000f, 1500f))
+        var polyline1 = Polyline(1, lists1)
+        imageMap?.addPolyline(polyline1)
 
         imageMap?.addMarker(marker)
         imageMap?.addMarker(marker1)

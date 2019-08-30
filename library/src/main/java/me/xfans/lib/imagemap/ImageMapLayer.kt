@@ -1,16 +1,13 @@
 package me.xfans.lib.imagemap
 
 import android.content.Context
-import android.graphics.Canvas
-import android.graphics.Matrix
-import android.graphics.Rect
+import android.graphics.*
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.View
 import android.widget.ImageView
 import me.xfans.lib.imagemap.marker.Marker
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.Gravity
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import me.xfans.lib.imagemap.polyline.Polyline
 
 
 class ImageMapLayer @JvmOverloads constructor(
@@ -19,11 +16,15 @@ class ImageMapLayer @JvmOverloads constructor(
 
     var imageView: ImageView? = null
     var markers = mutableListOf<Marker>()
+    var polylines = mutableListOf<Polyline>()
     val pointIn = FloatArray(2)
     var pointOut = FloatArray(2)
     val posRect = Rect()
     val iconRect = Rect()
     var iconMatrix = Matrix()
+
+    var polylinePaint = Paint()
+    val polylinePath = Path()
 
     fun attachToImage(imageView: ImageView) {
         this.imageView = imageView
@@ -34,19 +35,53 @@ class ImageMapLayer @JvmOverloads constructor(
         invalidate()
     }
 
+    fun addPolyline(polyline: Polyline) {
+        polylines.add(polyline)
+        invalidate()
+    }
+
     fun update() {
         invalidate()
     }
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        for (polyline in polylines) {
+            drawPolyline(polyline, canvas)
+        }
         for (maker in markers) {
             drawMaker(maker, canvas)
         }
     }
 
+    private fun drawPolyline(polyline: Polyline, canvas: Canvas?) {
+        polylinePath.reset()
+        polylinePaint.color = Color.RED
+        polylinePaint.style = Paint.Style.STROKE;
+        polylinePaint.strokeWidth = 10f;
+        polylinePaint.strokeJoin = Paint.Join.ROUND;
+        polylinePaint.strokeCap = Paint.Cap.ROUND;
+        polylinePaint.isAntiAlias = true
+
+        val lists = polyline.points
+        for (i in lists.indices) {
+            val point = lists[i]
+            pointIn[0] = point.x
+            pointIn[1] = point.y
+            imageView?.imageMatrix?.mapPoints(pointOut, pointIn)
+            if (i == 0) {
+                polylinePath.moveTo(pointOut[0], pointOut[1])
+            } else {
+                polylinePath.lineTo(pointOut[0], pointOut[1])
+            }
+        }
+        canvas?.save()
+        canvas?.drawPath(polylinePath, polylinePaint)
+        canvas?.restore()
+    }
+
     private fun drawMaker(maker: Marker, canvas: Canvas?) {
-        var icon = maker.icon
+        val icon = maker.icon
         pointIn[0] = maker.x
         pointIn[1] = maker.y
         iconMatrix.reset()
@@ -54,9 +89,8 @@ class ImageMapLayer @JvmOverloads constructor(
         iconMatrix.postTranslate(pointOut[0], pointOut[1])
 
         iconRect.set(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
-        
-        Gravity.apply(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 0, iconRect, posRect);
 
+        Gravity.apply(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 0, iconRect, posRect);
 
         iconMatrix.postTranslate((-posRect.left).toFloat(), (-posRect.top).toFloat());
         canvas?.save();
