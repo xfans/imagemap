@@ -8,6 +8,8 @@ import android.view.View
 import android.widget.ImageView
 import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.polyline.Polyline
+import android.graphics.DashPathEffect
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 class ImageMapLayer @JvmOverloads constructor(
@@ -62,6 +64,12 @@ class ImageMapLayer @JvmOverloads constructor(
         polylinePaint.strokeJoin = Paint.Join.ROUND;
         polylinePaint.strokeCap = Paint.Cap.ROUND;
         polylinePaint.isAntiAlias = true
+        if (polyline.isDashLine) {
+            val dashPathEffect1 = DashPathEffect(floatArrayOf(20f, 20f), 0f)
+            polylinePaint.setPathEffect(dashPathEffect1)
+        } else {
+            polylinePaint.setPathEffect(null)
+        }
 
         val lists = polyline.points
         for (i in lists.indices) {

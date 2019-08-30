@@ -59,7 +59,7 @@ class MainActivity : AppCompatActivity() {
         lists1.add(PointF(1500f, 1800f))
         lists1.add(PointF(1800f, 1200f))
         lists1.add(PointF(2000f, 1500f))
-        var polyline1 = Polyline(1, lists1)
+        var polyline1 = Polyline(1, lists1, true)
         imageMap?.addPolyline(polyline1)
 
         imageMap?.addMarker(marker)
