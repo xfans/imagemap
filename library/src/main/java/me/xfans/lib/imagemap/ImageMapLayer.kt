@@ -10,6 +10,10 @@ import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.polyline.Polyline
 import android.graphics.DashPathEffect
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.util.Log
+import android.view.MotionEvent
+import android.widget.Toast
+import me.xfans.lib.imagemap.marker.OnMarkerClickListener
 
 
 class ImageMapLayer @JvmOverloads constructor(
@@ -27,6 +31,13 @@ class ImageMapLayer @JvmOverloads constructor(
 
     var polylinePaint = Paint()
     val polylinePath = Path()
+    var values = FloatArray(9)
+
+    private var mOnMarkerClickListener: OnMarkerClickListener? = null
+
+    fun setOnMarkerClickListener(onMarkerClickListener: OnMarkerClickListener) {
+        mOnMarkerClickListener = onMarkerClickListener
+    }
 
     fun attachToImage(imageView: ImageView) {
         this.imageView = imageView
@@ -44,6 +55,35 @@ class ImageMapLayer @JvmOverloads constructor(
 
     fun update() {
         invalidate()
+    }
+
+    fun click(event: MotionEvent): Boolean {
+        Log.e("ImageMapLayer", "x:" + event.x + " y:" + event.y)
+        imageView?.imageMatrix?.getValues(values)
+
+        val relativeX = (event.x - values[2]) / values[0]
+        val relativeY = (event.y - values[5]) / values[4]
+
+        for (m in markers) {
+            if (inMarker(relativeX, relativeY, m)) {
+                Toast.makeText(context, "id:" + m.id, Toast.LENGTH_LONG).show()
+                if (mOnMarkerClickListener != null) {
+                    mOnMarkerClickListener?.click(m)
+                }
+                return true
+            }
+        }
+        return false
+    }
+
+    private fun inMarker(x: Float, y: Float, m: Marker): Boolean {
+        val icon = m.icon
+        val w = icon.getIntrinsicWidth() / 2
+        val h = icon.getIntrinsicHeight() / 2
+        val clickRect = Rect(x.toInt(), y.toInt(), (x + 1).toInt(), (y + 1).toInt())
+        val markRect =
+            Rect((m.x - w - 5).toInt(), (m.y - h - 5).toInt(), (m.x + w + 5).toInt(), (m.y + h + 5).toInt())
+        return clickRect.intersect(markRect)
     }
 
     override fun onDraw(canvas: Canvas?) {
@@ -96,11 +136,12 @@ class ImageMapLayer @JvmOverloads constructor(
         imageView?.imageMatrix?.mapPoints(pointOut, pointIn)
         iconMatrix.postTranslate(pointOut[0], pointOut[1])
 
-        iconRect.set(0, 0, icon.getIntrinsicWidth(), icon.getIntrinsicHeight());
+        iconRect.set(0, 0, icon.intrinsicWidth, icon.intrinsicHeight);
 
         Gravity.apply(Gravity.BOTTOM or Gravity.CENTER_HORIZONTAL, 0, 0, iconRect, posRect);
 
-        iconMatrix.postTranslate((-posRect.left).toFloat(), (-posRect.top).toFloat());
+        iconMatrix.postTranslate((-posRect.left).toFloat(), (-posRect.top).toFloat())
+
         canvas?.save();
 
         canvas?.concat(iconMatrix)

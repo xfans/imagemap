@@ -17,6 +17,8 @@ import androidx.core.app.ComponentActivity
 import androidx.core.app.ComponentActivity.ExtraData
 import androidx.core.content.ContextCompat.getSystemService
 import android.icu.lang.UCharacter.GraphemeClusterBreak.T
+import android.view.MotionEvent
+import com.alexvasilkov.gestures.GestureController
 import com.alexvasilkov.gestures.State
 import me.xfans.lib.imagemap.polyline.Polyline
 
@@ -33,7 +35,7 @@ class MainActivity : AppCompatActivity() {
         imageView?.setImageResource(R.drawable.world_map);
         imageMap?.attachToImage(imageView!!);
 
-        imageView?.getController()?.addOnStateChangeListener(object : OnStateChangeListener {
+        imageView?.controller?.addOnStateChangeListener(object : OnStateChangeListener {
             override fun onStateChanged(state: State) {
                 imageMap?.update()
             }
@@ -42,14 +44,39 @@ class MainActivity : AppCompatActivity() {
                 imageMap?.update()
             }
         })
-        var marker = Marker(1, 1000f, 200f, getIcon(R.color.colorAccent))
-        var marker1 = Marker(1, 1500f, 600f, getIcon(R.color.colorPrimary))
+        imageView?.controller?.setOnGesturesListener(object : GestureController.OnGestureListener {
+            override fun onDown(event: MotionEvent) {
 
-        var lists = mutableListOf<PointF>()
+            }
+
+            override fun onDoubleTap(event: MotionEvent): Boolean {
+                return false
+            }
+
+            override fun onUpOrCancel(event: MotionEvent) {
+            }
+
+            override fun onLongPress(event: MotionEvent) {
+            }
+
+            override fun onSingleTapConfirmed(event: MotionEvent): Boolean {
+                return false
+            }
+
+            override fun onSingleTapUp(event: MotionEvent): Boolean {
+                return imageMap?.click(event) == true
+            }
+
+        })
+
+        val marker = Marker(1, 1000f, 200f, getIcon(R.color.colorAccent))
+        val marker1 = Marker(2, 1500f, 600f, getIcon(R.color.colorPrimary))
+
+        val lists = mutableListOf<PointF>()
         lists.add(PointF(1000f, 200f))
 
         lists.add(PointF(1500f, 600f))
-        var polyline = Polyline(1, lists)
+        val polyline = Polyline(1, lists)
         imageMap?.addPolyline(polyline)
 
         var lists1 = mutableListOf<PointF>()
