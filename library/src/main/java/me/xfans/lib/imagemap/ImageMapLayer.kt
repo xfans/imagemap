@@ -13,6 +13,7 @@ import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 import android.util.Log
 import android.view.MotionEvent
 import android.widget.Toast
+import me.xfans.lib.imagemap.circle.Circle
 import me.xfans.lib.imagemap.marker.OnMarkerClickListener
 
 
@@ -23,6 +24,7 @@ class ImageMapLayer @JvmOverloads constructor(
     var imageView: ImageView? = null
     var markers = mutableListOf<Marker>()
     var polylines = mutableListOf<Polyline>()
+    var circles = mutableListOf<Circle>()
     val pointIn = FloatArray(2)
     var pointOut = FloatArray(2)
     val posRect = Rect()
@@ -53,6 +55,11 @@ class ImageMapLayer @JvmOverloads constructor(
         invalidate()
     }
 
+    fun addCircles(circle: Circle) {
+        circles.add(circle)
+        invalidate()
+    }
+
     fun update() {
         invalidate()
     }
@@ -78,8 +85,8 @@ class ImageMapLayer @JvmOverloads constructor(
 
     private fun inMarker(x: Float, y: Float, m: Marker): Boolean {
         val icon = m.icon
-        val w = icon.getIntrinsicWidth() / 2
-        val h = icon.getIntrinsicHeight() / 2
+        val w = icon.intrinsicWidth / 2
+        val h = icon.intrinsicHeight / 2
         val clickRect = Rect(x.toInt(), y.toInt(), (x + 1).toInt(), (y + 1).toInt())
         val markRect =
             Rect((m.x - w - 5).toInt(), (m.y - h - 5).toInt(), (m.x + w + 5).toInt(), (m.y + h + 5).toInt())
@@ -88,12 +95,19 @@ class ImageMapLayer @JvmOverloads constructor(
 
     override fun onDraw(canvas: Canvas?) {
         super.onDraw(canvas)
+        for (circle in circles) {
+            drawCircle(circle, canvas)
+        }
         for (polyline in polylines) {
             drawPolyline(polyline, canvas)
         }
         for (maker in markers) {
             drawMaker(maker, canvas)
         }
+    }
+
+    private fun drawCircle(circle: Circle, canvas: Canvas?) {
+        //TODO drawCircle
     }
 
     private fun drawPolyline(polyline: Polyline, canvas: Canvas?) {
