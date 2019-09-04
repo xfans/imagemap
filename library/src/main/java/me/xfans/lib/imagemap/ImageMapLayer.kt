@@ -3,18 +3,16 @@ package me.xfans.lib.imagemap
 import android.content.Context
 import android.graphics.*
 import android.util.AttributeSet
+import android.util.Log
 import android.view.Gravity
+import android.view.MotionEvent
 import android.view.View
 import android.widget.ImageView
-import me.xfans.lib.imagemap.marker.Marker
-import me.xfans.lib.imagemap.polyline.Polyline
-import android.graphics.DashPathEffect
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.util.Log
-import android.view.MotionEvent
 import android.widget.Toast
 import me.xfans.lib.imagemap.circle.Circle
+import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.marker.OnMarkerClickListener
+import me.xfans.lib.imagemap.polyline.Polyline
 
 
 class ImageMapLayer @JvmOverloads constructor(

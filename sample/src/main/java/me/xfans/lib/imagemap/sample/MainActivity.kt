@@ -1,25 +1,20 @@
 package me.xfans.lib.imagemap.sample
 
-import android.graphics.Point
+import android.graphics.BitmapFactory
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
-import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
-import android.widget.ImageView
+import android.view.MotionEvent
 import androidx.annotation.ColorRes
+import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.core.graphics.drawable.DrawableCompat
+import com.alexvasilkov.gestures.GestureController
+import com.alexvasilkov.gestures.GestureController.OnStateChangeListener
+import com.alexvasilkov.gestures.State
 import com.alexvasilkov.gestures.views.GestureImageView
 import me.xfans.lib.imagemap.ImageMapLayer
 import me.xfans.lib.imagemap.marker.Marker
-import com.alexvasilkov.gestures.GestureController.OnStateChangeListener
-import androidx.core.app.ComponentActivity
-import androidx.core.app.ComponentActivity.ExtraData
-import androidx.core.content.ContextCompat.getSystemService
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
-import android.view.MotionEvent
-import com.alexvasilkov.gestures.GestureController
-import com.alexvasilkov.gestures.State
 import me.xfans.lib.imagemap.polyline.Polyline
 
 
@@ -32,7 +27,11 @@ class MainActivity : AppCompatActivity() {
         setContentView(R.layout.activity_main)
         imageView = findViewById(R.id.imageView)
         imageMap = findViewById(R.id.imageMap)
-        imageView?.setImageResource(R.drawable.world_map);
+
+        val ins = assets.open("gugong.jpg")
+        val bmp = BitmapFactory.decodeStream(ins)
+        imageView?.setImageBitmap(bmp);
+
         imageMap?.attachToImage(imageView!!);
 
         imageView?.controller?.addOnStateChangeListener(object : OnStateChangeListener {
@@ -69,28 +68,44 @@ class MainActivity : AppCompatActivity() {
 
         })
 
-        val marker = Marker(1, 1000f, 200f, getIcon(R.color.colorAccent))
-        val marker1 = Marker(2, 1500f, 600f, getIcon(R.color.colorPrimary))
+        val marker = Marker(1, 773f, 1834f, getIcon(R.color.colorAccent))
+        val marker1 = Marker(2, 388f, 788f, getIcon(R.color.colorPrimary))
 
         val lists = mutableListOf<PointF>()
-        lists.add(PointF(1000f, 200f))
+        lists.add(PointF(773f, 1834f))
 
-        lists.add(PointF(1500f, 600f))
+        lists.add(PointF(773f, 1717f))
+        lists.add(PointF(640f, 1717f))
+        lists.add(PointF(640f, 1610f))
+        lists.add(PointF(510f, 1610f))
+        lists.add(PointF(508f, 1491f))
+        lists.add(PointF(517f, 1341f))
+
+        lists.add(PointF(542f, 1286f))
+        lists.add(PointF(542f, 854f))
+        lists.add(PointF(388f, 854f))
+
+        lists.add(PointF(388f, 788f))
         val polyline = Polyline(1, lists)
         imageMap?.addPolyline(polyline)
-
-        var lists1 = mutableListOf<PointF>()
-        lists1.add(PointF(1200f, 1200f))
-        lists1.add(PointF(1100f, 1300f))
-        lists1.add(PointF(1100f, 1400f))
-        lists1.add(PointF(1500f, 1800f))
-        lists1.add(PointF(1800f, 1200f))
-        lists1.add(PointF(2000f, 1500f))
-        var polyline1 = Polyline(1, lists1, true)
-        imageMap?.addPolyline(polyline1)
-
         imageMap?.addMarker(marker)
         imageMap?.addMarker(marker1)
+
+
+        val marker2 = Marker(1, 773f, 1191f, getIcon(R.color.colorAccent))
+        val marker3 = Marker(2, 1500f, 1550f, getIcon(R.color.colorPrimary))
+        var lists1 = mutableListOf<PointF>()
+        lists1.add(PointF(773f, 1191f))
+        lists1.add(PointF(1157f, 1191f))
+        lists1.add(PointF(1157f, 1231f))
+        lists1.add(PointF(1274f, 1231f))
+        lists1.add(PointF(1274f, 1540f))
+        lists1.add(PointF(1500f, 1550f))
+        var polyline1 = Polyline(1, lists1, true)
+        imageMap?.addPolyline(polyline1)
+        imageMap?.addMarker(marker2)
+        imageMap?.addMarker(marker3)
+
     }
 
     private fun getIcon(@ColorRes colorId: Int): Drawable {
@@ -100,4 +115,6 @@ class MainActivity : AppCompatActivity() {
         DrawableCompat.setTint(icon!!, ContextCompat.getColor(this, colorId))
         return icon
     }
+
+
 }
