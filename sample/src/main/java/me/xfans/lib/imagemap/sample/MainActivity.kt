@@ -1,6 +1,7 @@
 package me.xfans.lib.imagemap.sample
 
 import android.graphics.BitmapFactory
+import android.graphics.Color
 import android.graphics.PointF
 import android.graphics.drawable.Drawable
 import android.os.Bundle
@@ -14,6 +15,7 @@ import com.alexvasilkov.gestures.GestureController.OnStateChangeListener
 import com.alexvasilkov.gestures.State
 import com.alexvasilkov.gestures.views.GestureImageView
 import me.xfans.lib.imagemap.ImageMapLayer
+import me.xfans.lib.imagemap.circle.Circle
 import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.polyline.Polyline
 
@@ -105,6 +107,9 @@ class MainActivity : AppCompatActivity() {
         imageMap?.addPolyline(polyline1)
         imageMap?.addMarker(marker2)
         imageMap?.addMarker(marker3)
+
+        var circle = Circle(0, PointF(773f,1191f),200f,Color.parseColor("#7A0000AA"))
+        imageMap?.addCircles(circle)
 
     }
 

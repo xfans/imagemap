@@ -13,6 +13,7 @@ import me.xfans.lib.imagemap.circle.Circle
 import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.marker.OnMarkerClickListener
 import me.xfans.lib.imagemap.polyline.Polyline
+import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 class ImageMapLayer @JvmOverloads constructor(
@@ -29,6 +30,7 @@ class ImageMapLayer @JvmOverloads constructor(
     val iconRect = Rect()
     var iconMatrix = Matrix()
 
+    var circlePaint = Paint()
     var polylinePaint = Paint()
     val polylinePath = Path()
     var values = FloatArray(9)
@@ -105,7 +107,20 @@ class ImageMapLayer @JvmOverloads constructor(
     }
 
     private fun drawCircle(circle: Circle, canvas: Canvas?) {
-        //TODO drawCircle
+        circlePaint.isAntiAlias = true
+        circlePaint.color = circle.color
+        canvas?.save()
+        pointIn[0] = circle.center.x
+        pointIn[1] = circle.center.y
+        val valuesCircle = FloatArray(9)
+        imageView?.imageMatrix?.getValues(valuesCircle)
+        imageView?.imageMatrix?.mapPoints(pointOut, pointIn)
+
+        var scale = Math.min(valuesCircle[Matrix.MSCALE_X], valuesCircle[Matrix.MSCALE_Y])
+
+        canvas?.drawCircle(pointOut[0], pointOut[1], scale * circle.radius, circlePaint)
+        canvas?.restore()
+
     }
 
     private fun drawPolyline(polyline: Polyline, canvas: Canvas?) {

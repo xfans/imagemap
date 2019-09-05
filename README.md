@@ -4,6 +4,12 @@
 ## Screenshot
 ![Screenshot2](pic/2.jpg)
 
+## Use
+ * `addMarker`
+ * `setOnMarkerClickListener`
+ * `addPolyline`
+ * `addCircles`
+
 ### License
 
     Licensed under the Apache License, Version 2.0 (the "License");
