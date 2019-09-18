@@ -13,7 +13,6 @@ import me.xfans.lib.imagemap.circle.Circle
 import me.xfans.lib.imagemap.marker.Marker
 import me.xfans.lib.imagemap.marker.OnMarkerClickListener
 import me.xfans.lib.imagemap.polyline.Polyline
-import android.icu.lang.UCharacter.GraphemeClusterBreak.T
 
 
 class ImageMapLayer @JvmOverloads constructor(
