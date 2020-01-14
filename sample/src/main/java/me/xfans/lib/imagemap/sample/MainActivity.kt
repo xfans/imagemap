@@ -33,7 +33,7 @@ class MainActivity : AppCompatActivity() {
         val ins = assets.open("gugong.jpg")
         val bmp = BitmapFactory.decodeStream(ins)
         imageView?.setImageBitmap(bmp);
-
+        imageView?.controller?.settings?.isRotationEnabled = true
         imageMap?.attachToImage(imageView!!);
 
         imageView?.controller?.addOnStateChangeListener(object : OnStateChangeListener {

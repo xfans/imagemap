@@ -1,14 +1,19 @@
 # imagemap
 图片地图，室内地图，image map,svg map
+可以做室内地图使用,支持Marker\Polyline\Circles等.
+可以使用svg解析库,用来支持矢量地图
 
 ## Screenshot
-![Screenshot2](pic/2.jpg)
+![Screenshot2](pic/5.gif)
 
-## Use
+## Features
  * `addMarker`
  * `setOnMarkerClickListener`
  * `addPolyline`
  * `addCircles`
+
+## Libraries
+ * https://github.com/alexvasilkov/GestureViews
 
 ### License
 
